@@ -1,0 +1,30 @@
+{
+  "name": "corolla-webgl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "predev": "npm run clean",
+    "dev": "parcel src/index.html -p 3000 --open",
+    "prebuild": "npm run clean",
+    "build": "parcel build src/index.html --out-dir ./dist --public-url . --detailed-report",
+    "clean": "shx rm -rf dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hrahimi270 & simti",
+  "license": "MIT",
+  "dependencies": {
+    "dat.gui": "^0.7.6",
+    "gsap": "^3.5.1",
+    "jquery": "^3.4.1",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-asset-copier": "^1.0.0",
+    "parcel-plugin-static-files-copy": "^2.2.1",
+    "shx": "^0.3.2",
+    "three": "^0.119.1"
+  },
+  "staticFiles": {
+    "staticPath": "static",
+    "watcherGlob": "**"
+  }
+}

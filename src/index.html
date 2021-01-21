@@ -17,42 +17,177 @@
         <div class="content">
             <img src="../static/logo.jpg" style="width: 150px;" alt="Toyota" />
             <h1>Toyota corolla xle 2020 3D tour</h1>
-            <p>We're loading assets...</p>
+            <p>Assets are Loading...</p>
             <div class="progressbar-track">
                 <span class="progressbar-thumb" id="progressbar_thumb" style="width: 0%;"></span>
             </div>
         </div>
     </div>
-    <div class="controls">
-        <ul>
-            <li class="user_control_1" data-control="dimensions">Dimensions <span>.1</span></li>
-            <li class="user_control_2" data-control="aerodynamics">Aerodynamics <span>.2</span></li>
-            <li class="user_control_3" data-control="front_lighting">Front Lighting <span>.3</span></li>
-            <li class="user_control_4" data-control="rear_lighting">Rear Lighting <span>.4</span></li>
-            <li class="user_control_5" data-control="wheel_steering">4-Wheel Steering <span>.5</span></li>
-            <li class="user_control_6 active" data-control="free_viewing">Free Viewing <span>.6</span></li>
-            <li class="user_control_7" data-control="log_camera_pos">current camera position<span>.7</span></li>
-        </ul>
+    <button>close</button>
+    <div class="gui__header">
+        <div class="gui__header--item" id="drive">
+            <svg title="Drive" width="32" height="32" viewBox="0 0 32 32">
+                <path d="M18.22 16A2.22 2.22 0 1 0 16 18.22 2.23 2.23 0 0 0 18.22 16zM16 17.22A1.22 1.22 0 1 1 17.22 16 1.22 1.22 0 0 1 16 17.22z"></path>
+                <path d="M16 7a9 9 0 1 0 9 9 9 9 0 0 0-9-9zm0 17a8 8 0 0 1-7.71-6h2.86a1.93 1.93 0 0 1 1.1.34c.82.58 2.16 2 1.94 4.91a.49.49 0 0 0 .46.53.5.5 0 0 0 .5-.46c.25-3.42-1.37-5.1-2.36-5.79a2.87 2.87 0 0 0-1.64-.53H8.1a8.26 8.26 0 0 1-.1-1 8 8 0 0 1 16 0 8.26 8.26 0 0 1-.07 1h-2.84a3.12 3.12 0 0 0-1.84.58c-1 .7-2.53 2.38-2.28 5.74a.5.5 0 0 0 .5.46.5.5 0 0 0 .46-.53c-.21-2.74.91-4.16 1.87-4.86a2.07 2.07 0 0 1 1.29-.39h2.62A8 8 0 0 1 16 24z"></path>
+                <path d="M16 3.85A12.15 12.15 0 1 0 28.15 16 12.16 12.16 0 0 0 16 3.85zm0 23.3A11.15 11.15 0 1 1 27.15 16 11.16 11.16 0 0 1 16 27.15z"></path>
+                <path d="M22.39 14.23a.51.51 0 0 0 .17 0 .51.51 0 0 0 .17-1c-5.92-2.07-13.25-.23-13.56-.16a.5.5 0 0 0-.36.61.49.49 0 0 0 .6.36c.08-.04 7.35-1.83 12.98.19z"></path>
+            </svg>
+        </div>
+        <div class="item-seperator"></div>
+        <div class="gui__header--item">
+            <svg title="Day mode" width="32" height="32" viewBox="0 0 32 32">
+                <path d="M16 10.89A5.11 5.11 0 1 0 21.11 16 5.11 5.11 0 0 0 16 10.89zm0 9.22A4.11 4.11 0 1 1 20.11 16 4.11 4.11 0 0 1 16 20.11zM15.5 4.28h1v5.14h-1z"></path>
+                <path transform="rotate(-30 11.434 8.084)" d="M10.92 5.51h1v5.14h-1z"></path>
+                <path transform="rotate(-60 8.077 11.43)" d="M7.58 8.86h1V14h-1z"></path>
+                <path d="M4.28 15.5h5.14v1H4.28z"></path>
+                <path transform="rotate(-30 8.084 20.586)" d="M5.51 20.07h5.14v1H5.51z"></path>
+                <path transform="rotate(-60.01 11.423 23.926)" d="M8.86 23.42H14v1H8.86z"></path>
+                <path d="M15.5 22.58h1v5.14h-1z"></path>
+                <path transform="rotate(-30 20.568 23.931)" d="M20.07 21.36h1v5.14h-1z"></path>
+                <path transform="rotate(-60 23.925 20.58)" d="M23.42 18.01h1v5.14h-1z"></path>
+                <path d="M22.58 15.5h5.14v1h-5.14z"></path>
+                <path transform="rotate(-30 23.918 11.429)" d="M21.36 10.92h5.14v1h-5.14z"></path>
+                <path transform="rotate(-60.01 20.578 8.073)" d="M18.01 7.58h5.14v1h-5.14z"></path>
+            </svg>
+        </div>
     </div>
-    <div class="steering-control">
-        <button type="button" id="steer_left">
-            <img src="../static/arrow.png" />
-            Turn Left
-        </button>
-        <button type="button" id="steer_right">
-            Turn Right
-            <img src="../static/arrow.png" />
-        </button>
+    <div class="gui__sidebar--color">
+        <div class="sidebar__header">
+            <h1 class="headline">Colours</h1>
+        </div>
+        <div class="sidebar__header--seperator"></div>
+        <div class="gui__sidebar--main">
+            <div class="color__information">
+                <div class="color__information--title">
+                    bodypanels
+                </div>
+                <div class="color__information--name">
+                    bodypanels in white
+                </div>
+            </div>
+            <div class="color__selection" style="opacity: 1;">
+                <div class="color_container" style="pointer-events: all;">
+                    <div class="BuzQa">
+                        <div color="#34393c" class="fCoWNJ">
+                            <svg viewBox="0 0 50 50" class="kYpySq">
+                                <circle cx="25" cy="25" r="23.5"></circle>
+                            </svg>
+                            <svg viewBox="0 0 50 50" stroke-width="1.5" class="dBHJZa">
+                                <circle class="circ_black" cx="25" cy="25" r="23.5"></circle>
+                            </svg>
+                            <div data-color="rgb(0,0,0)" data-color_name="black" class="color_button"></div>
+                        </div>
+                    </div>
+                    <div class="BuzQa">
+                        <div color="#34393c" class="fCoWNJ red">
+                            <svg viewBox="0 0 50 50" class="kYpySq">
+                                <circle cx="25" cy="25" r="23.5"></circle>
+                            </svg>
+                            <svg viewBox="0 0 50 50" stroke-width="1.5" class="dBHJZa">
+                                <circle class="circ_red" cx="25" cy="25" r="23.5"></circle>
+                            </svg>
+                            <div data-color="rgb(196,0,0)" data-color_name="red" class="color_button"></div>
+                        </div>
+                    </div>
+                    <div class="BuzQa">
+                        <div color="#34393c" class="fCoWNJ blue">
+                            <svg viewBox="0 0 50 50" class="kYpySq">
+                                <circle cx="25" cy="25" r="23.5"></circle>
+                            </svg>
+                            <svg viewBox="0 0 50 50" stroke-width="1.5" class="dBHJZa">
+                                <circle class="circ_blue active" cx="25" cy="25" r="23.5"></circle>
+                            </svg>
+                            <div data-color="rgb(0,25,105)" data-color_name="blue" class="color_button"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="floated-box" id="dimensions_box" style="opacity: 0; pointer-events: none; right: 60%; top: 10%;">
-        <h2>Dimensions</h2>
-        <p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
+
+    <div class="gui__sidebar--part">
+        <div class="sidebar__header">
+            <h1 class="headline">parts</h1>
+        </div>
+        <div class="sidebar__header--seperator"></div>
+        <div class="gui__sidebar--main">
+            <div id="rear_light" class="part__card">
+                <div class="part__card--title">
+                    <div>Rear Lights</div>
+                </div>
+                <div class="part__card--icon">
+                    <svg width="30" height="30" stroke-width="1" fill="white" viewBox="0 0 25.75 26.61">
+                        <path d="M10.4 14.06l4.86 4.86.71-.71-4.86-4.86 4.95-4.95-.71-.71-4.95 4.95-.7.71.7.71z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="head_light" class="part__card">
+                <div class="part__card--title">
+                    <div>Front Headlights</div>
+                </div>
+                <div class="part__card--icon">
+                    <svg width="30" height="30" stroke-width="1" fill="white" viewBox="0 0 25.75 26.61">
+                        <path d="M10.4 14.06l4.86 4.86.71-.71-4.86-4.86 4.95-4.95-.71-.71-4.95 4.95-.7.71.7.71z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="sunroof" class="part__card">
+                <div class="part__card--title">
+                    <div>Sunroof</div>
+                </div>
+                <div class="part__card--icon">
+                    <svg width="30" height="30" stroke-width="1" fill="white" viewBox="0 0 25.75 26.61">
+                        <path d="M10.4 14.06l4.86 4.86.71-.71-4.86-4.86 4.95-4.95-.71-.71-4.95 4.95-.7.71.7.71z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="wheel_rings" class="part__card">
+                <div class="part__card--title">
+                    <div>Wheel Rings</div>
+                </div>
+                <div class="part__card--icon">
+                    <svg width="30" height="30" stroke-width="1" fill="white" viewBox="0 0 25.75 26.61">
+                        <path d="M10.4 14.06l4.86 4.86.71-.71-4.86-4.86 4.95-4.95-.71-.71-4.95 4.95-.7.71.7.71z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="free_view" class="part__card">
+                <div class="part__card--title">
+                    <div>Free View</div>
+                </div>
+                <div class="part__card--icon">
+                    <svg width="30" height="30" stroke-width="1" fill="white" viewBox="0 0 25.75 26.61">
+                        <path d="M10.4 14.06l4.86 4.86.71-.71-4.86-4.86 4.95-4.95-.71-.71-4.95 4.95-.7.71.7.71z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="floated-box" id="aerodynamics_box" style="opacity: 0; pointer-events: none;  right: 30%; top: 5%;">
-        <h2>Aerodynamics</h2>
-        <p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
+    <div class="gui__footer">
+        <div id="color_panel" class="gui__footer--card">
+            <div class="card__inner first">
+                <div class="card__inner--title">Car Paint</div>
+                <div class="card__inner--caption">customize your car with different colors</div>
+            </div>
+        </div>
+        <div id="part_panel" class="gui__footer--card">
+            <div class="card__inner second">
+                <div class="card__inner--title">Car's Parts</div>
+                <div class="card__inner--caption">read more details about different parts</div>
+            </div>
+        </div>
+        <div class="gui__footer--card">
+            <div class="card__inner third">
+                <div class="card__inner--title">About configurator</div>
+                <div class="card__inner--caption">learn more about how we make this configurator</div>
+            </div>
+        </div>
     </div>
-    <canvas class="canvas js-canvas"></canvas>
+    <canvas id="canvas" class="js-canvas"></canvas>
     <script src="./javascript/index.js"></script>
 
 </body>

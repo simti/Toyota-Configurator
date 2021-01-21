@@ -3,10 +3,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import dat from 'dat.gui';
 
 // Classes
-require('./Utils/Stats');
+require('./Utils/TweenMax.min.js');
 
 // Constants
 global.THREE = THREE;
@@ -28,25 +27,25 @@ const CAMERA_POSITIONS = {
         z: -40,
         duration: 5
     },
-    aerodynamics: {
+    sunroof: {
         x: 847,
         y: 436,
         z: 517,
         duration: 5
     },
-    front_lighting: {
+    head_light: {
         x: -5.5,
         y: 170,
         z: 1071,
         duration: 5
     },
-    rear_lighting: {
+    rear_light: {
         x: 29,
         y: 170,
         z: -1071,
         duration: 5
     },
-    wheel_steering: {
+    wheel_rings: {
         x: 635,
         y: 170,
         z: -862,
@@ -54,8 +53,21 @@ const CAMERA_POSITIONS = {
     },
 }
 
+const CAR_COLORS ={
+    "black": new THREE.MeshBasicMaterial({
+      color: 0x000000
+    }),
+    "blue": new THREE.MeshBasicMaterial({
+      color: 0x001969
+    }),
+    "red": new THREE.MeshBasicMaterial({
+      color: 0xc40000
+    })
+  }
+
 // ground texture
 let texture;
+let car_objects = [];
 class WebGL {
     constructor(_options) {
         // variables
@@ -86,7 +98,8 @@ class WebGL {
             backLightsOffColor: new THREE.Color(0x000000),
             dayLightColor: new THREE.Color(0xFFFFFF),
             nightLightColor: new THREE.Color(0x333333),
-            backgroundLight: 1
+            backgroundLight: 1,
+            active_sidebar:""
         };
 
         this.prevTime = 0;
@@ -149,25 +162,20 @@ class WebGL {
         this.controls.update();
         this.checkCameraPosition();
         this.render();
-        console.log("driving:"+this.state.driveMode)
         if (this.carObjects.length && this.state.driveMode==true) {
             texture.offset.x += 0.01;
             this.rotateWheels();
         }
 
-        // console.log(`camera x: ${Math.round(this.camera.position.x)} - y: ${Math.round(this.camera.position.y)} - z: ${Math.round(this.camera.position.z)}`)
-
         this.prevTime = time;
     }
 
     render() {
-        // console.log('camera angle:' + this.cameraAngle);
         this.renderer.render(this.scene, this.camera);
     }
 
     resize() {
         const width = window.innerWidth, height = window.innerHeight;
-
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);
@@ -208,11 +216,8 @@ class WebGL {
         let cam_z_pos = Math.round(this.camera.position.z);
         if(cam_x_pos < 0 && cam_x_pos > -50){
           // console.log("hide it")
-          // console.log(this.carObjects)
-          // console.log(this.carObjects.filter(obj => obj.name=="WheelFR"))
         }
       }
-      // console.log(`camera x: ${cam_x_pos} - y: ${cam_y_pos} - z: ${cam_z_pos}`)
     }
 
     //create env and add objects to it
@@ -262,9 +267,6 @@ class WebGL {
         setTimeout(() => {
             document.getElementById("preload_screen").style.display = "none";
         }, 500)
-
-        // this.addGUI();
-
     }
 
     initPlane() {
@@ -367,7 +369,6 @@ class WebGL {
         this.getCubeMapTexture().then(({ envMap }) => {
             this.content.traverse((child) => {
                 if ( child.isMesh ) {
-                    // console.log(child)
                     child.material.envMap  = envMap;
                     child.material.envMapIntensity =1;
                     child.castShadow = true;
@@ -388,7 +389,6 @@ class WebGL {
                         child.material.roughness=0.04;
                         child.material.side=2;
                         child.renderOrder=1;
-                        // console.log(child)
                     }
 
                     if(child.name == "Shishe_jelo"){
@@ -399,17 +399,14 @@ class WebGL {
                         child.material.reflectivity=0.5;
                         child.material.roughness=0;
                         child.material.side=2;
-                        // child.material.color=new THREE.Color("rgb(0,0, 0)");
                     }
 
                     if(child.name == "shise_cheragh_jelo" && child.material.name=="shishe_cheragh_jelo"){
-                        console.log(child)
                         child.material.opacity=1;
                         child.material.metalness=0;
                         child.material.reflectivity=1;
                         child.material.roughness=0;
                         child.material.transmission=0.9;
-                        // child.material.color=new THREE.Color("rgb(0,0, 1)");
                         child.material.needsUpdate=true;
 
                         // add glow left
@@ -517,103 +514,28 @@ class WebGL {
             "shishe_ghrmez",
             ""
         ].map((name) => {
-            this.content.traverse((node) => (node.name === name || node.name.toLowerCase().includes(name) && node.name !== "lastik_saghf") && this.carObjects.push(node));
-        })
+            this.content.traverse((node) => {
+                if(node.name === name || node.name.toLowerCase().includes(name) && node.name !== "lastik_saghf"){
+                    this.carObjects.push(node);
+                    car_objects.push(node);
+                }
+            });
+        });
     }
 
     setControlsListener() {
-        // Controls
-        document.getElementsByClassName("user_control_1")[0].addEventListener("click", () => this.setCurrentControl(1), false);
-        document.getElementsByClassName("user_control_2")[0].addEventListener("click", () => this.setCurrentControl(2), false);
-        document.getElementsByClassName("user_control_3")[0].addEventListener("click", () => this.setCurrentControl(3), false);
-        document.getElementsByClassName("user_control_4")[0].addEventListener("click", () => this.setCurrentControl(4), false);
-        document.getElementsByClassName("user_control_5")[0].addEventListener("click", () => this.setCurrentControl(5), false);
-        document.getElementsByClassName("user_control_6")[0].addEventListener("click", () => this.setCurrentControl(6), false);
-        document.getElementsByClassName("user_control_7")[0].addEventListener("click", () => this.setCurrentControl(7), false);
-
-        // Steering controls
-        document.getElementById("steer_left").addEventListener("click", () => this.turnSteering("left"))
-        document.getElementById("steer_right").addEventListener("click", () => this.turnSteering("right"))
-    }
-
-    setCurrentControl(controlNumber) {
-        // remove active class from current control
-        const query = document.querySelector(".controls ul li.active");
-        query.classList.remove("active");
-
-        // add new active control
-        document.getElementsByClassName(`user_control_${controlNumber}`)[0].classList.add("active");
-
-        // set control and run animation
-        switch (controlNumber) {
-            case 1:
-                this.currentControl = 1
-                this.updateCameraPositon(CAMERA_POSITIONS.dimensions);
-                removeSteeringVisibility()
-                this.turnSteering("center");
-                this.floatedBpx("aerodynamics", "hide")
-                this.floatedBpx("dimensions", "show")
-                break;
-            case 2:
-                this.currentControl = 2
-                this.updateCameraPositon(CAMERA_POSITIONS.aerodynamics);
-                removeSteeringVisibility()
-                this.turnSteering("center")
-                this.floatedBpx("dimensions", "hide")
-                this.floatedBpx("aerodynamics", "show")
-                break;
-            case 3:
-                this.currentControl = 3
-                this.updateCameraPositon(CAMERA_POSITIONS.front_lighting);
-                removeSteeringVisibility()
-                this.turnSteering("center")
-                this.floatedBpx("dimensions", "hide")
-                this.floatedBpx("aerodynamics", "hide")
-                break;
-            case 4:
-                this.currentControl = 4
-                this.updateCameraPositon(CAMERA_POSITIONS.rear_lighting);
-                removeSteeringVisibility()
-                this.turnSteering("center")
-                this.floatedBpx("dimensions", "hide")
-                this.floatedBpx("aerodynamics", "hide")
-                break;
-            case 5:
-                this.currentControl = 5
-                this.updateCameraPositon(CAMERA_POSITIONS.wheel_steering);
-                steeringVisibility()
-                this.floatedBpx("dimensions", "hide")
-                this.floatedBpx("aerodynamics", "hide")
-                break;
-            case 6:
-                this.currentControl = 6
-                this.updateCameraPositon(CAMERA_POSITIONS.free_view);
-                removeSteeringVisibility()
-                this.turnSteering("center")
-                this.floatedBpx("dimensions", "hide")
-                this.floatedBpx("aerodynamics", "hide")
-                break;
-            case 7:
-                this.state.driveMode = !this.state.driveMode;
-              // console.log(`camera x: ${Math.round(this.camera.position.x)} - y: ${Math.round(this.camera.position.y)} - z: ${Math.round(this.camera.position.z)}`)
-              break;
-            default:
-                // back to free view again
-                this.currentControl = 6
-                this.updateCameraPositon(CAMERA_POSITIONS.free_view);
-                removeSteeringVisibility()
-                this.turnSteering("center")
-                this.floatedBpx("dimensions", "hide")
-                this.floatedBpx("aerodynamics", "hide")
-                break;
-        }
-
-        function removeSteeringVisibility() {
-            document.getElementsByClassName("steering-control")[0].classList.remove("visible");
-        }
-        function steeringVisibility() {
-            document.getElementsByClassName("steering-control")[0].classList.add("visible");
-        }
+        document.querySelector("button").addEventListener("click", () =>this.close_all(), false);
+        document.querySelector("#part_panel").addEventListener("click", () =>this.open_sidebar('part'), false);
+        document.querySelector("#color_panel").addEventListener("click", () =>this.open_sidebar('color'), false);
+        document.querySelectorAll(".color_button").forEach(el=>{
+            el.addEventListener("click",()=>this.change_car_paint(el),false)
+        })
+        document.querySelector("#rear_light").addEventListener("click",()=>this.change_view('rear_light'),false)
+        document.querySelector("#head_light").addEventListener("click",()=>this.change_view('front_light'),false)
+        document.querySelector("#sunroof").addEventListener("click",()=>this.change_view('sunroof'),false)
+        document.querySelector("#wheel_rings").addEventListener("click",()=>this.change_view('wheel_rings'),false)
+        document.querySelector("#free_view").addEventListener("click",()=>this.change_view('free_view'),false)
+        document.querySelector("#drive").addEventListener("click",()=>this.state.driveMode = !this.state.driveMode,false)
     }
 
     turnSteering(direction) {
@@ -748,43 +670,8 @@ class WebGL {
         // this.carObjects.filter((object) => object.name === "Lastic1")[3].parent.rotation.x+=0.01;
     }
 
-    // addGUI() {
-    //     const gui = new dat.GUI();
-
-    //     // Emissive
-    //     const emissiveFolter = gui.addFolder("Emissive");
-    //     const emissiveIntensity = emissiveFolter.add(this.state, "emissiveIntensity", 0, 5)
-    //     emissiveIntensity.onChange(() => this.updateEnvironment())
-
-    //     const envMapIntensity = emissiveFolter.add(this.state, "envMapIntensity", 0, 5);
-    //     envMapIntensity.onChange(() => this.updateEnvironment())
-
-    //     const refractionRatio = emissiveFolter.add(this.state, "refractionRatio", 0, 1);
-    //     refractionRatio.onChange(() => this.updateEnvironment())
-
-    //     const metalness = emissiveFolter.add(this.state, "metalness", 0, 1);
-    //     metalness.onChange(() => this.updateEnvironment());
-
-    //     const roughness = emissiveFolter.add(this.state, "roughness", 0, 1);
-    //     roughness.onChange(() => this.updateEnvironment());
-
-    //     // Lights
-    //     const lightsFolder = gui.addFolder("Lights");
-    //     const exposure = lightsFolder.add(this.state, "exposure", 0, 2);
-    //     exposure.onChange(() => this.updateLights())
-
-    //     // const background = lightsFolder.add(this.state, "backgroundLight", 0, 1);
-    //     // background.onChange(() => this.addBackgroundEnv())
-
-    //     // Wheels
-    //     const wheelsFolder = gui.addFolder("Wheels");
-    //     const wheelsSpeed = wheelsFolder.add(this.state, "wheelSpeed", 0, 0.5);
-    //     wheelsSpeed.onChange(() => this.rotateWheels());
-    // }
-
     traverseMaterials(object, callback) {
         object.traverse((node) => {
-            // console.log(node)
             if (!node.isMesh){
               return;
             }
@@ -795,8 +682,82 @@ class WebGL {
             materials.forEach(callback);
         });
     }
+
+    open_sidebar(title){
+        this.state.active_sidebar = title;
+        if(title == "part"){
+          this.close_sidebar("color")
+          document.querySelector(".gui__sidebar--part").style.transform = "translate3d(0px, 0px, 0px)";
+        }else{
+          this.close_sidebar("part")
+          document.querySelector(".gui__sidebar--color").style.transform = "translate3d(0px, 0px, 0px)";
+        }
+
+        document.querySelector("#canvas").classList.add("sidebar_opened")
+        document.querySelector(".gui__footer").classList.add("sidebar_opened")
+    }
+    close_sidebar(title){
+        if(title == "part"){
+          document.querySelector(".gui__sidebar--part").style.transform = "translate3d(100%, 0px, 0px)";
+        }else{
+          document.querySelector(".gui__sidebar--color").style.transform = "translate3d(100%, 0px, 0px)";
+        }
+    }
+    close_all(){
+        document.querySelector(`.gui__sidebar--${this.state.active_sidebar}`).style.transform = "translate3d(100%, 0px, 0px)";
+        document.querySelector("#canvas").classList.remove("sidebar_opened")
+        document.querySelector(".gui__footer").classList.remove("sidebar_opened")
+    }
+    change_car_paint(element){
+        document.querySelector('circle.active').classList.remove("active");
+        document.querySelector(`circle.circ_${element.dataset.color_name}`).classList.add('active');
+        const body = this.carObjects.filter(part=>{
+          return part.name == "badane_mashin"
+        })[0];
+        this.colorTo(body,CAR_COLORS[element.dataset.color_name]);
+
+    }
+    colorTo(meshBody, newColor) {
+        let target = meshBody
+        let initial = new THREE.Color(target.material.color.getHex());
+        let value = new THREE.Color(newColor.color.getHex());
+        TweenLite.to(initial, 0.5, {
+          r: value.r,
+          g: value.g,
+          b: value.b,
+          onStart: function(){
+            target.material.color = initial;
+          },
+          onComplete: function(){
+            target.material.color = value;
+          },
+          onUpdate: function () {
+          }
+        });
+    }
+    change_view(view_name){
+        console.log("change view")
+        switch(view_name) {
+          case 'rear_light':
+            this.updateCameraPositon(CAMERA_POSITIONS.rear_light);
+            break;
+          case 'front_light':
+            this.updateCameraPositon(CAMERA_POSITIONS.head_light);
+            break;
+          case 'sunroof':
+            this.updateCameraPositon(CAMERA_POSITIONS.sunroof);
+            break;
+          case 'wheel_rings':
+            this.updateCameraPositon(CAMERA_POSITIONS.wheel_rings);
+            break;
+          case 'free_view':
+            this.updateCameraPositon(CAMERA_POSITIONS.free_view);
+            break;
+          default:
+        }
+    }
 }
 
 window.application = new WebGL({
-    canvas: document.getElementsByClassName("canvas")[0]
+    canvas: document.querySelector("#canvas")
 });
